@@ -1,0 +1,18 @@
+# IDEs
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+
+# Scratch files
+scratch/
+
+# Build artifacts (just in case they are ever created here)
+build/
+install/
+log/

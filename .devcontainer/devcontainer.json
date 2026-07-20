@@ -1,0 +1,49 @@
+{
+  "name": "PX4 ROS2 Development Environment",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "USERNAME": "developer",
+      "USER_UID": "1000",
+      "USER_GID": "1000"
+    }
+  },
+
+  "remoteUser": "developer",
+  "containerUser": "developer",
+  "workspaceFolder": "/home/developer/workspace",
+
+  "mounts": [
+    "source=${localWorkspaceFolder}/workspace,target=/home/developer/workspace,type=bind",
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+  ],
+
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "WORKSPACE_DIR": "/home/developer"
+  },
+
+  "runArgs": [
+    "--privileged",
+    "--network=host",
+    "--shm-size=512m"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cmake-tools",
+        "ms-python.python",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "cmake.configureOnOpen": false,
+        "python.defaultInterpreterPath": "/usr/bin/python3"
+      }
+    }
+  },
+
+}
