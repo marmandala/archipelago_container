@@ -23,14 +23,14 @@ RUN pip3 install --no-cache-dir --upgrade pip && \
 # Gazebo Garden
 RUN wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null && \
-    apt-get update && apt-get install -y gz-garden && rm -rf /var/lib/apt/lists/*
+    apt-get update && apt-get install -y gz-garden libgz-sim7-dev libgz-transport12-dev libgz-msgs9-dev libgz-math7-dev && rm -rf /var/lib/apt/lists/*
 
 # PX4 dependencies
 RUN apt-get update && apt-get install -y \
     astyle lcov libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
     gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-libav ninja-build protobuf-compiler \
     libeigen3-dev libopencv-dev rsync libarmadillo-dev libnlopt-cxx-dev libpcl-dev \
-    ros-humble-ros-gz ros-humble-image-pipeline ros-humble-foxglove-bridge \
+    ros-humble-image-pipeline ros-humble-foxglove-bridge \
     && rm -rf /var/lib/apt/lists/*
 
 # Micro-XRCE-DDS Agent
@@ -61,9 +61,9 @@ RUN git clone -b release/1.15 https://github.com/PX4/PX4-Autopilot.git --recursi
 RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
     git clone -b release/1.15 https://github.com/PX4/px4_msgs.git && \
     git clone -b release/1.15 https://github.com/PX4/px4_ros_com.git && \
-    git clone https://github.com/gazebosim/ros_gz.git && \
+    git clone -b humble https://github.com/gazebosim/ros_gz.git && \
     cd /home/$USERNAME/ros2_ws && \
-    bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-install"
+    bash -c "source /opt/ros/humble/setup.bash && export GZ_VERSION=garden && MAKEFLAGS='-j4' colcon build --symlink-install --executor sequential --cmake-args -DBUILD_TESTING=OFF"
 
 # Configure bash environment
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
