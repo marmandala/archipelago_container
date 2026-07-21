@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y \
 RUN cd /tmp && \
     git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
     cd Micro-XRCE-DDS-Agent && mkdir build && cd build && \
-    cmake .. && make -j4 && make install && ldconfig /usr/local/lib/ && \
+    cmake .. && make && make install && ldconfig /usr/local/lib/ && \
     cd / && rm -rf /tmp/Micro-XRCE-DDS-Agent
 
 # Setup user
@@ -55,7 +55,7 @@ RUN git clone -b release/1.15 https://github.com/PX4/PX4-Autopilot.git --recursi
     cd PX4-Autopilot && \
     git checkout v1.15.4 && \
     git submodule update --init --recursive && \
-    MAKEFLAGS="-j4" make px4_sitl gz_x500_depth
+    make px4_sitl gz_x500_depth
 
 # Clone and build ROS2 workspace INSIDE the image
 RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
@@ -63,7 +63,7 @@ RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
     git clone -b release/1.15 https://github.com/PX4/px4_ros_com.git && \
     git clone -b humble https://github.com/gazebosim/ros_gz.git && \
     cd /home/$USERNAME/ros2_ws && \
-    bash -c "source /opt/ros/humble/setup.bash && export GZ_VERSION=garden && MAKEFLAGS='-j4' colcon build --symlink-install --executor sequential --cmake-args -DBUILD_TESTING=OFF"
+    bash -c "source /opt/ros/humble/setup.bash && export GZ_VERSION=garden && colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF"
 
 # Configure bash environment
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
