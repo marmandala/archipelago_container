@@ -55,7 +55,7 @@ RUN git clone -b release/1.15 https://github.com/PX4/PX4-Autopilot.git --recursi
     cd PX4-Autopilot && \
     git checkout v1.15.4 && \
     git submodule update --init --recursive && \
-    make px4_sitl gz_x500_depth
+    DONT_RUN=1 make px4_sitl gz_x500_depth
 
 # Clone and build ROS2 workspace INSIDE the image
 RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
