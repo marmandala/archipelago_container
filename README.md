@@ -75,4 +75,11 @@ To visualize the data streams:
 - `.github/workflows/docker-build.yml`: CI/CD configuration. Triggers a build and push to Docker Hub only when the Dockerfile or workflow configuration is modified.
 - `workspace/scripts/`: Initialization and orchestration bash scripts.
 - `workspace/scripts/generate_forest.py`: Procedural SDF world generator script.
-- `workspace/worlds/`: Output directory for generated Gazebo environment models.
+- `workspace/worlds/`: Output directory for generated Gazebo environment models (generated at runtime, not tracked in Git).
+
+## Known Limitations / TODO
+
+- **Micro-XRCE-DDS-Agent version not pinned**: The Dockerfile clones `HEAD` of the Micro-XRCE-DDS-Agent repository without specifying a tag. For reproducible builds, this should be pinned to a specific release compatible with PX4 v1.15.4 (e.g. `--branch v2.4.x`). Alternatively, consider installing via snap (`sudo snap install micro-xrce-dds-agent`) to avoid building from source entirely.
+- **Non-reproducible world generation**: `generate_forest.py` does not use a fixed `random.seed()`, so the forest layout changes on every run. For reproducible experiments, add a seed constant at the top of the script.
+- **No overlap check for trees**: The forest generator places trees with `random.uniform()` but does not verify minimum distance between them. Trees may overlap.
+- **No orchestration layer**: Launching the simulation requires opening 4 separate terminals manually. Consider adding a `docker-compose.yml` or a `tmux`-based startup script to orchestrate all components in one command.

@@ -16,3 +16,6 @@ scratch/
 build/
 install/
 log/
+
+# Generated Gazebo worlds (created at runtime by generate_forest.py)
+workspace/worlds/*.sdf
